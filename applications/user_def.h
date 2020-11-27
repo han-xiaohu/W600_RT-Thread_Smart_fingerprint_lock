@@ -14,7 +14,7 @@ struct onenet_msg {
 #define INFRARED_UP_WAIT       (rt_tick_from_millisecond(3 * 1000))
 #define FINGER_UP_WAIT       (rt_tick_from_millisecond(3 * 1000))
 #define REMOTE_UP_WAIT       (rt_tick_from_millisecond(3 * 1000))
-#define DOOR_STATE_UP_WAIT       (rt_tick_from_millisecond(1 * 1000))
+#define DOOR_STATE_UP_WAIT       (rt_tick_from_millisecond(300))
 
 
 

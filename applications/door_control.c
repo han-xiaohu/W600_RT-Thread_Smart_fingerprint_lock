@@ -48,6 +48,8 @@ rt_uint8_t msg_send_onenet_pool[128];
 struct rt_device_pwm *pwm_dev1;      /* PWM设备句柄 */
 
 
+static rt_uint8_t door_state_last;
+
 
 void SetAngle(rt_uint32_t angle)
 {
@@ -72,6 +74,7 @@ void door_state_pin_ind(void *args)
 		mqbuf.type = DOOR_STATE_MSG;
 		mqbuf.id = rt_pin_read(DOOR_STATE_PIN);
 		rt_mq_send(&mq_send_onenet, &mqbuf, sizeof(mqbuf));
+		door_state_last = rt_pin_read(DOOR_STATE_PIN);
 	}
 }
 
@@ -223,6 +226,27 @@ static void door_beep_entry(void)
 	}
 }
 
+
+/* 蜂鸣器线程 */
+static void door_state_confirm_entry(void)
+{
+	struct onenet_msg mqbuf = {0};
+	while(1)
+	{
+		
+		if(door_state_last != rt_pin_read(DOOR_STATE_PIN))
+		{
+			/* 发送消息到消息队列中 */
+			mqbuf.type = DOOR_STATE_MSG;
+			mqbuf.id = rt_pin_read(DOOR_STATE_PIN);
+			rt_mq_send(&mq_send_onenet, &mqbuf, sizeof(mqbuf));
+			door_state_last = rt_pin_read(DOOR_STATE_PIN);	
+		}
+		
+		rt_thread_mdelay(10000);
+	}
+}
+
 rt_err_t door_control_init(void)
 {
 	rt_err_t ret = RT_EOK;
@@ -291,7 +315,7 @@ rt_err_t door_control_init(void)
     }
 	
 	/* 创建net led灯线程 */
-    thread = rt_thread_create("net_led", (void (*)(void *parameter))net_led_entry, RT_NULL, 512, 30, 10);  //stack_size 256
+    thread = rt_thread_create("net_led", (void (*)(void *parameter))net_led_entry, RT_NULL, 512, 29, 10);  //stack_size 256
     if (thread != RT_NULL)
     {
         rt_thread_startup(thread);
@@ -304,6 +328,18 @@ rt_err_t door_control_init(void)
 	
 	/* 创建蜂鸣器线程 */
     thread = rt_thread_create("door_beep", (void (*)(void *parameter))door_beep_entry, RT_NULL, 512, 28, 10); //stack_size 256
+    if (thread != RT_NULL)
+    {
+        rt_thread_startup(thread);
+    }
+    else
+    {
+        ret = RT_ERROR;
+		goto _error;
+    }
+	
+	/* 创建门状态确认线程 */
+    thread = rt_thread_create("door_confirm", (void (*)(void *parameter))door_state_confirm_entry, RT_NULL, 512, 30, 10); //stack_size 256
     if (thread != RT_NULL)
     {
         rt_thread_startup(thread);
