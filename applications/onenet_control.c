@@ -106,15 +106,44 @@ static void onenet_upload_entry(void *parameter)
 }
 
 
+static void network_state_confirm_entry(void *parameter)
+{
+	rt_uint32_t err_count = 0;
+	while (1)
+    {
+		LOG_D("rt_wlan_is_connected : %d",rt_wlan_is_connected());
+		LOG_D("rt_wlan_is_ready : %d",rt_wlan_is_ready());
+		if(!(rt_wlan_is_connected() && rt_wlan_is_ready()))
+		{
+			if(err_count++ >= 6)
+			{
+				wdg_reset();
+			}
+		}
+		else
+		{
+			err_count = 0;
+		}
+		rt_thread_mdelay(10000);
+    }
+}
+
+
 rt_err_t onenet_control_init(void)
 {
 	rt_err_t ret = RT_EOK;
-	
+	rt_uint32_t err_count = 0;
 	
 	while(wifi_connect() != RT_EOK)
 	{
 		rt_thread_mdelay(5000); //连接失败5s后重连
+		if(err_count++ >= 3)
+		{
+			wdg_reset();
+		}
+		
 	}
+	
 	rt_wlan_config_autoreconnect(1);
 	LOG_D("wifi connected!");
 	
@@ -126,7 +155,14 @@ rt_err_t onenet_control_init(void)
 	}
 	
 	/* 创建线程 */
-    rt_thread_t thread = rt_thread_create("onenet_send", onenet_upload_entry, RT_NULL, 2 * 1024, 26, 50); //stack_size 1024
+    rt_thread_t thread = rt_thread_create("network_state", network_state_confirm_entry, RT_NULL, 512, 28, 50); //stack_size 256
+    if (thread)
+    {
+        rt_thread_startup(thread);
+    }
+	
+	/* 创建线程 */
+    thread = rt_thread_create("onenet_send", onenet_upload_entry, RT_NULL, 2 * 1024, 26, 50); //stack_size 1024
     if (thread)
     {
         rt_thread_startup(thread);

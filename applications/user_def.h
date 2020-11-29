@@ -18,10 +18,11 @@ struct onenet_msg {
 
 
 
-
+void wdg_reset(void);
 rt_err_t wdt_init(void);
 rt_err_t wifi_connect(void);
 
+	
 rt_err_t door_control_init(void);
 rt_err_t onenet_control_init(void);
 rt_err_t infrared_control_init(void);

@@ -209,20 +209,20 @@ static void door_beep_entry(void)
 
 		LOG_D("beep beep beep!\n");
 
-		rt_pin_write(BEEP_PIN, PIN_HIGH);
-		rt_thread_mdelay(80);
-		rt_pin_write(BEEP_PIN, PIN_LOW);
-		rt_thread_mdelay(80);
+//		rt_pin_write(BEEP_PIN, PIN_HIGH);
+//		rt_thread_mdelay(80);
+//		rt_pin_write(BEEP_PIN, PIN_LOW);
+//		rt_thread_mdelay(80);
 
-		rt_pin_write(BEEP_PIN, PIN_HIGH);
-		rt_thread_mdelay(80);
-		rt_pin_write(BEEP_PIN, PIN_LOW);
-		rt_thread_mdelay(80);
+//		rt_pin_write(BEEP_PIN, PIN_HIGH);
+//		rt_thread_mdelay(80);
+//		rt_pin_write(BEEP_PIN, PIN_LOW);
+//		rt_thread_mdelay(80);
 
-		rt_pin_write(BEEP_PIN, PIN_HIGH);
-		rt_thread_mdelay(80);
-		rt_pin_write(BEEP_PIN, PIN_LOW);
-		rt_thread_mdelay(80);
+//		rt_pin_write(BEEP_PIN, PIN_HIGH);
+//		rt_thread_mdelay(80);
+//		rt_pin_write(BEEP_PIN, PIN_LOW);
+//		rt_thread_mdelay(80);
 	}
 }
 
