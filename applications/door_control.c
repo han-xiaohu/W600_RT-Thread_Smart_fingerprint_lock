@@ -13,7 +13,7 @@
 #define LED_GREEN_PIN   23
 #define LED_BLUE_PIN    30
 #define BEEP_PIN     	21
-#define NET_LED_PIN     26
+#define NET_LED_PIN     27
 #define DOOR_STATE_PIN  29
 
 
@@ -50,7 +50,7 @@ struct rt_device_pwm *pwm_dev1;      /* PWM设备句柄 */
 
 static rt_uint8_t door_state_last;
 
-
+/* PWM输出 */
 void SetAngle(rt_uint32_t angle)
 {
 	rt_uint32_t  pulse;
@@ -227,7 +227,7 @@ static void door_beep_entry(void)
 }
 
 
-/* 蜂鸣器线程 */
+/* 开门状态检测 */
 static void door_state_confirm_entry(void)
 {
 	struct onenet_msg mqbuf = {0};
@@ -247,6 +247,7 @@ static void door_state_confirm_entry(void)
 	}
 }
 
+/* 初始化 */
 rt_err_t door_control_init(void)
 {
 	rt_err_t ret = RT_EOK;
@@ -302,8 +303,8 @@ rt_err_t door_control_init(void)
 		goto _error;
     }
 	
-	/* 创建door led灯线程 */
-    thread = rt_thread_create("door_led", (void (*)(void *parameter))door_led_entry, RT_NULL, 512, 27, 10);  //stack_size 256
+	/* 创建rgb led灯线程 */
+    thread = rt_thread_create("rgb_led", (void (*)(void *parameter))door_led_entry, RT_NULL, 512, 27, 10);  //stack_size 256
     if (thread != RT_NULL)
     {
         rt_thread_startup(thread);
@@ -338,7 +339,7 @@ rt_err_t door_control_init(void)
 		goto _error;
     }
 	
-	/* 创建门状态确认线程 */
+	/* 创建开门状态检测线程 */
     thread = rt_thread_create("door_confirm", (void (*)(void *parameter))door_state_confirm_entry, RT_NULL, 512, 30, 10); //stack_size 256
     if (thread != RT_NULL)
     {

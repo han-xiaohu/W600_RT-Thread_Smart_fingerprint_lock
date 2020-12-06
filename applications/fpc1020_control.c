@@ -22,7 +22,6 @@ extern struct rt_mailbox mb_led;
 extern struct rt_messagequeue mq_send_onenet;
 
 
-
 #define SAMPLE_UART_NAME  		"uart1"
 #define DATA_CMD_END      		0xF5       /* 结束位 */
 #define ONE_DATA_MAXLEN   		20         /* 不定长数据的最大长度 */
@@ -262,13 +261,14 @@ static void finger_identification_entry(void)
 		
 		if(FPC1020_WaitData())
 		{
-			rt_mb_send(&mb_led, 1);
+			rt_mb_send(&mb_led, LED_RED);
 			LOG_D("SCANING...");
 			if(FPC1020_Search(&uid[0], &uid[1], RT_NULL))
 			{
 				rt_sem_release(&door_open_sem);
 				LOG_D("SUCCESS!\n");
 				
+				//避免频繁发送数据
 				if(rt_tick_get() - last_tick > FINGER_UP_WAIT)
 				{
 					last_tick = rt_tick_get();
@@ -280,7 +280,7 @@ static void finger_identification_entry(void)
 			}
 			else
 			{
-				rt_mb_send(&mb_led, 3);
+				rt_mb_send(&mb_led, LED_BLUE);
 				LOG_D("FAIL\n");
 			}
 		}

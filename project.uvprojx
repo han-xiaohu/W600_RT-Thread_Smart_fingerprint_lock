@@ -479,14 +479,14 @@
               <FilePath>applications\infrared_control.c</FilePath>
             </File>
             <File>
-              <FileName>main.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>applications\main.c</FilePath>
-            </File>
-            <File>
               <FileName>onenet_control.c</FileName>
               <FileType>1</FileType>
               <FilePath>applications\onenet_control.c</FilePath>
+            </File>
+            <File>
+              <FileName>wifi_control.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>applications\wifi_control.c</FilePath>
             </File>
             <File>
               <FileName>wdt_control.c</FileName>
@@ -494,9 +494,9 @@
               <FilePath>applications\wdt_control.c</FilePath>
             </File>
             <File>
-              <FileName>wifi_control.c</FileName>
+              <FileName>main.c</FileName>
               <FileType>1</FileType>
-              <FilePath>applications\wifi_control.c</FilePath>
+              <FilePath>applications\main.c</FilePath>
             </File>
           </Files>
         </Group>

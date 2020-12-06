@@ -16,7 +16,7 @@
 
 
 /* 配置相关引脚 */
-#define WIFI_CFG_PIN     27
+#define WIFI_CFG_PIN     26
 
 
 /* 信号量 */

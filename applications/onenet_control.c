@@ -28,7 +28,7 @@ extern struct rt_semaphore door_open_sem;
 /* 消息队列 */
 extern struct rt_messagequeue mq_send_onenet;
 
-
+/* OneNET MQTT订阅回调 */
 static void onenet_cmd_rsp_cb(uint8_t *recv_data, size_t recv_size, uint8_t **resp_data, size_t *resp_size)
 {
 	static struct onenet_msg mqbuf = {0};
@@ -71,7 +71,7 @@ static void onenet_cmd_rsp_cb(uint8_t *recv_data, size_t recv_size, uint8_t **re
 }
 
 
-
+/* OneNET数据上传 */
 static void onenet_upload_entry(void *parameter)
 {
 	struct onenet_msg mqbuf = {0};
@@ -106,6 +106,7 @@ static void onenet_upload_entry(void *parameter)
 }
 
 
+/* 网络状态检测线程 */
 static void network_state_confirm_entry(void *parameter)
 {
 	rt_uint32_t err_count = 0;
@@ -115,7 +116,7 @@ static void network_state_confirm_entry(void *parameter)
 		LOG_D("rt_wlan_is_ready : %d",rt_wlan_is_ready());
 		if(!(rt_wlan_is_connected() && rt_wlan_is_ready()))
 		{
-			if(err_count++ >= 6)
+			if(err_count++ >= 6) //60秒无连接复位
 			{
 				wdg_reset();
 			}
@@ -137,7 +138,7 @@ rt_err_t onenet_control_init(void)
 	while(wifi_connect() != RT_EOK)
 	{
 		rt_thread_mdelay(5000); //连接失败5s后重连
-		if(err_count++ >= 3)
+		if(err_count++ >= 3)  //三次失败复位
 		{
 			wdg_reset();
 		}
@@ -170,6 +171,10 @@ rt_err_t onenet_control_init(void)
 	
 	return ret;
 }
+
+
+
+
 
 
 rt_err_t onenet_port_save_device_info(char *dev_id, char *api_key)

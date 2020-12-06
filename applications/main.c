@@ -1,13 +1,3 @@
-/*
- * Copyright (c) 2006-2018, RT-Thread Development Team
- *
- * SPDX-License-Identifier: Apache-2.0
- *
- * Change Logs:
- * Date           Author       Notes
- * 2018-09-01     ZYLX         first implementation
- */
-
 #include <rtthread.h>
 #include <rtdevice.h>
 #include <easyflash.h>
