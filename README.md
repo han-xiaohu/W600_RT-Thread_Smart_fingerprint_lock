@@ -22,7 +22,7 @@
 
 电路设计使用了立创EDA，项目所有硬件资料在立创开源硬件平台上。
 
-- 硬件项目地址：[立创开源硬件平台](https://oshwhub.com/hanxiaohu/zhi-wen-men-suo)
+- **硬件项目地址：<https://oshwhub.com/hanxiaohu/zhi-wen-men-suo>**
    
 > 指纹模块的控制和指纹录入请参考FPC1020A SDK里面有详细资料和调试工具，在立创开源硬件平台附件里有FPC1020A SDK和离线版STM32指纹门锁项目全部资料。
 
@@ -65,11 +65,11 @@ main.c|main函数
 ### 5.1 创建项目
 打开[OneNET控制台](https://open.iot.10086.cn/develop/global/product/#/console) 进入多协议接入
 
-![image](.assets\onenet\images\多协议接入.png)
+![image](.assets/onenet/images/多协议接入.png)
 
 在MQTT（旧版）页面点击添加产品，设备接入协议确保是MQTT，其他随便填写
 
-![image](.assets\onenet\images\设备接入协议.png)
+![image](.assets/onenet/images/设备接入协议.png)
 
 ### 5.2 获取连接参数
 项目创建成功后需要获取三个参数
@@ -77,13 +77,13 @@ main.c|main函数
 - Master-APIkey
 - 设备注册码
 
-![image](.assets\onenet\images\产品概况.png)
+![image](.assets/onenet/images/产品概况.png)
 
-![image](.assets\onenet\images\设备列表.png)
+![image](.assets/onenet/images/设备列表.png)
 
 ### 5.3 配置RT-Thread
 打开`rtconfig.h`文件将自己的这三个参数粘贴到对应位置
-![image](.assets\onenet\images\RTCONFIG.png)
+![image](.assets/onenet/images/RTCONFIG.png)
 
 > 这里为了方便可直接修改`rtconfig.h`<br/>
 > 如果需要继续开发本项目请使用env工具修改这三个参数，env工具使用方法参考 [Env 用户手册](https://www.rt-thread.org/document/site/programming-manual/env/env/)
@@ -95,7 +95,7 @@ main.c|main函数
 - 历史开门方式
   
 进入设备详情查看
-![image](.assets\onenet\images\数据流.png)
+![image](.assets/onenet/images/数据流.png)
 
 开关状态取决于检测开门状态的传感器，这里使用了一个霍尔传感器模块，将一块磁铁安装在门框上，关门时霍尔传感器靠近磁铁，并输出低电平，此时W600读取电平并上传到OneNET
 
@@ -110,7 +110,7 @@ enum {IR_MSG = 1, FP_MSG, REMOTE_MSG};
 ### 5.5 开门测试
 这里可以手动测试远程开门功能
 
-![image](.assets\onenet\images\开门.png)
+![image](.assets/onenet/images/开门.png)
 
 开门数据格式为：
 
